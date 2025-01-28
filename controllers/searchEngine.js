@@ -59,26 +59,32 @@ async function cleanData(rawData) {
   /*
     Get the properties we're interested in:
     - Date of birth
+    - Date of death
   */
 
   // Date of birth (extract and get year, month and day)
   const dobStr =
     rawData.statements[wikiProps.dob][0].value.content.time.toString();
-  cleanedData.dob = getDateOfBirth(dobStr);
+  cleanedData.dob = getDate(dobStr);
+
+  // Date of death (extract and get year, month and day)
+  const dodStr =
+    rawData.statements[wikiProps.dod][0].value.content.time.toString();
+  cleanedData.dod = getDate(dodStr);
 
   return cleanedData;
 }
 
-function getDateOfBirth(dobStr) {
-  const dobSanitised = dobStr.replace("+", ""); // Remove the '+' so JavaScript can read the date correctly
-  const dob = new Date(dobSanitised);
-  const dobYear = dob.getUTCFullYear();
-  const dobMonth = dob.getUTCMonth() + 1; // 0 based indexing
-  const dobDay = dob.getUTCDate();
+function getDate(dateStr) {
+  const dateSanitised = dateStr.replace("+", ""); // Remove the '+' so JavaScript can read the date correctly
+  const date = new Date(dateSanitised);
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + 1; // 0 based indexing
+  const day = date.getUTCDate();
 
   return {
-    year: dobYear,
-    month: dobMonth,
-    day: dobDay,
+    year: year,
+    month: month,
+    day: day,
   };
 }

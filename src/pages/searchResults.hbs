@@ -35,6 +35,7 @@
         <h1 class="title">Results from WikiData</h1>
         <h2>Cleaned data</h2>
         <p>Date of birth: {{cleanData.dob.year}}/{{cleanData.dob.month}}/{{cleanData.dob.day}}
+        <p>Date of death: {{cleanData.dod.year}}/{{cleanData.dod.month}}/{{cleanData.dod.day}}
         <ul>
           {{#each cleanData}}
             <li><a href="#{{@key}}">{{@key}}</a></li>
