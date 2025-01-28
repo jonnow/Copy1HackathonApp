@@ -1,6 +1,9 @@
+const wikiProps = require("./../utilities/wikiprops");
+
 /* Module Exports */
 module.exports = {
   requestQuery: requestQuery,
+  cleanData: cleanData,
 };
 
 async function requestQuery(wikiDataId) {
@@ -47,4 +50,34 @@ async function requestQuery(wikiDataId) {
 
   //     return fetchedVal
   //   })
+}
+
+async function cleanData(rawData) {
+  const cleanedData = {};
+
+  /*
+    Get the properties we're interested in:
+    - Date of birth
+  */
+
+  // Date of birth (extract and get year, month and day)
+  const dobStr =
+    rawData.statements[wikiProps.dob][0].value.content.time.toString();
+  cleanedData.dob = getDateOfBirth(dobStr);
+
+  return cleanedData;
+}
+
+function getDateOfBirth(dobStr) {
+  const dobSanitised = dobStr.replace("+", ""); // Remove the '+' so JavaScript can read the date correctly
+  const dob = new Date(dobSanitised);
+  const dobYear = dob.getUTCFullYear();
+  const dobMonth = dob.getUTCMonth() + 1; // 0 based indexing
+  const dobDay = dob.getUTCDate();
+
+  return {
+    year: dobYear,
+    month: dobMonth,
+    day: dobDay,
+  };
 }

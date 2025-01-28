@@ -131,8 +131,14 @@ fastify.post("/search", async function (request, reply) {
   const wikiData = await search.requestQuery(wiki_id);
   console.log("Back from the search with the wikiData: ", wikiData);
 
+  // Clean the data to extract what we want
+  const definedWikiData = await search.cleanData(wikiData);
+
   // Return the results to a webpage
-  return reply.view("src/pages/searchResults.hbs", { data: wikiData });
+  return reply.view("src/pages/searchResults.hbs", {
+    rawData: wikiData,
+    cleanData: definedWikiData,
+  });
 });
 
 // Run the server and report out to the logs
