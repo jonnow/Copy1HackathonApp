@@ -1,3 +1,4 @@
+const fetch = require("node-fetch");
 const wikiProps = require("./../utilities/wikiprops");
 
 /* Module Exports */
