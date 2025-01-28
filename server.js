@@ -7,6 +7,7 @@ require("dotenv").config({ path: __dirname + "/.env" });
 const path = require("path");
 const fetch = require("node-fetch");
 const search = require("./controllers/searchEngine.js");
+const cleanData = require("./controllers/cleanData.js");
 
 // Require the fastify framework and instantiate it
 const fastify = require("fastify")({
