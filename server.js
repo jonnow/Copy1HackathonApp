@@ -8,6 +8,7 @@ const path = require("path");
 const fetch = require("node-fetch");
 const search = require("./controllers/searchEngine.js");
 const cleanData = require("./controllers/cleanData.js");
+const extractedWikiIds = require("./data/sampleIds.json");
 
 // Require the fastify framework and instantiate it
 const fastify = require("fastify")({
@@ -140,6 +141,29 @@ fastify.post("/search", async function (request, reply) {
     rawData: wikiData,
     cleanData: definedWikiData,
   });
+});
+fastify.get("/collage", async function (request, reply) {
+  try {
+    // Use Promise.all to handle all the asynchronous calls
+    const images = await Promise.all(
+      extractedWikiIds.map(async (wiki_id) => {
+        const wikiData = await search.requestQuery(wiki_id);
+        const definedWikiData = await cleanData.cleanImage(wikiData);
+        return definedWikiData?.img; // Return undefined if definedWikiData is undefined
+      })
+    );
+
+    // Filter out any undefined results
+    const filteredImages = images.filter((img) => img !== undefined);
+
+    // Send data back to the page
+    return reply.view("src/pages/collage.hbs", {
+      cleanData: filteredImages,
+    });
+  } catch (error) {
+    console.error("Error fetching wiki data:", error);
+    return reply.code(500).send("An error occurred while fetching data.");
+  }
 });
 
 // Run the server and report out to the logs

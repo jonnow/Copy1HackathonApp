@@ -30,36 +30,20 @@
   <body>
     <div class="wrapper">
       <div class="content" role="main">
+        <style>
+          ul.images { display: flex; li { list-style: none; } }
+        </style>
 
         <!-- This is the start of content for our page -->
-        <h1 class="title">Results from WikiData</h1>
-        <h2>Cleaned data</h2>
-        <img src="{{cleanData.img.src}}" width="300" alt="{{cleanData.img.alt}}" />
-        <p>Date of birth: {{cleanData.dob.day}}/{{cleanData.dob.month}}/{{cleanData.dob.year}}
-        <p>Date of death: {{cleanData.dod.day}}/{{cleanData.dod.month}}/{{cleanData.dod.year}}
-        <ul>
+        <h1 class="title">Images from WikiData</h1>
+        {{!-- <p>Clean data: {{cleanData}}</p> --}}
+        <ul class="images">
           {{#each cleanData}}
-            <li><a href="#{{@key}}">{{@key}}</a></li>
-          {{/each}}
-        </ul>
-        <hr />
-        <h2>Raw data:</h2>
-        <ul>
-          {{#each rawData}}
-            <li><a href="#{{@key}}">{{@key}}</a></li>
+            <li><img src="{{this.src}}" width="300" alt="{{this.alt}}" /></li>
+            {{!-- <li><a href="#{{@key}}">{{@key}}</a></li> --}}
           {{/each}}
         </ul>
 
-        {{#each rawData}}
-          <p id="{{@key}}">{{@key}}</p>
-          <ul>
-            {{#each this}}
-              <li>{{@key}}: {{this}}</li>
-            {{else}}
-              <p></p>
-            {{/each}}
-          </ul>
-        {{/each}}
       </div>
     </div>
   </body>

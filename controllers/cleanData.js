@@ -2,6 +2,7 @@ const wikiProps = require("./../utilities/wikiprops");
 
 module.exports = {
   cleanData: cleanData,
+  cleanImage: cleanImages,
 };
 
 async function cleanData(rawData) {
@@ -23,7 +24,27 @@ async function cleanData(rawData) {
     rawData.statements[wikiProps.dod][0].value.content.time.toString();
   cleanedData.dod = getDate(dodStr);
 
-  return cleanedData;
+  // Associated image
+  try {
+    const imgProps = rawData.statements[wikiProps.img][0];
+    cleanedData.img = getImage(imgProps);
+    return cleanedData;
+  } catch (error) {
+    console.error("No image found");
+    return;
+  }
+}
+
+async function cleanImages(rawData) {
+  const cleanedData = {};
+  try {
+    const imgProps = rawData.statements[wikiProps.img][0];
+    cleanedData.img = getImage(imgProps);
+    return cleanedData;
+  } catch (error) {
+    console.error("No image found");
+    return;
+  }
 }
 
 function getDate(dateStr) {
@@ -38,4 +59,12 @@ function getDate(dateStr) {
     month: month,
     day: day,
   };
+}
+
+function getImage(imgProps) {
+  const imgAlt = imgProps.qualifiers[0].value.content.text;
+  const imgStr = imgProps.value.content;
+  const wikiStr = `https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/${imgStr}&width=300`;
+
+  return { src: wikiStr, alt: imgAlt };
 }
