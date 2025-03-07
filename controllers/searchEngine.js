@@ -8,12 +8,11 @@ module.exports = {
 async function requestQuery(wikiDataId) {
   const url = `https://www.wikidata.org/w/rest.php/wikibase/v1/entities/items/${wikiDataId}`;
 
-  // Turns out we don't need the application token
   const res = await fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      //Authorization: `Bearer ${process.env.BEARER_TOKEN}`,
+      //Authorization: `Bearer ${process.env.BEARER_TOKEN}`, // Seems we don't need the application token for simple GET requests
     },
   });
 

@@ -15,14 +15,24 @@ async function cleanData(rawData) {
   */
 
   // Date of birth (extract and get year, month and day)
-  const dobStr =
-    rawData.statements[wikiProps.dob][0].value.content.time.toString();
-  cleanedData.dob = getDate(dobStr);
+  if (rawData.statements[wikiProps.dob]) {
+
+    const dobStr =
+      rawData.statements[wikiProps.dob][0].value.content.time.toString();
+    cleanedData.dob = getDate(dobStr);
+  } else {
+    cleanedData.dob = 'No data available'
+  }
 
   // Date of death (extract and get year, month and day)
-  const dodStr =
-    rawData.statements[wikiProps.dod][0].value.content.time.toString();
-  cleanedData.dod = getDate(dodStr);
+  if (rawData.statements[wikiProps.dod]) {
+
+    const dodStr =
+      rawData.statements[wikiProps.dod][0].value.content.time.toString();
+    cleanedData.dod = getDate(dodStr);
+  } else {
+    cleanedData.dod = 'No data available'
+  }
 
   // Associated image
   try {
@@ -62,8 +72,8 @@ function getDate(dateStr) {
 }
 
 function getImage(imgProps) {
-  const imgAlt = imgProps.qualifiers[0].value.content.text;
-  const imgStr = imgProps.value.content;
+  const imgAlt = imgProps.qualifiers?.[0]?.value?.content?.text || 'No alt text available';
+  const imgStr = imgProps.value?.content;
   const wikiStr = `https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/${imgStr}&width=300`;
 
   return { src: wikiStr, alt: imgAlt };

@@ -162,7 +162,7 @@ fastify.get("/collage", async function (request, reply) {
     });
   } catch (error) {
     console.error("Error fetching wiki data:", error);
-    return reply.code(500).send("An error occurred while fetching data.");
+    return reply.code(500).send("An error occurred while fetching data: " + error);
   }
 });
 
